@@ -116,7 +116,7 @@ graph TD
 ## 🛠️ Tech Stack
 | Layer          | Tools / Frameworks                               |
 |----------------|--------------------------------------------------|
-| **Frontend**   | Streamlit, React, Tailwind CSS                   |
+| **Frontend**   | HTML, js, Tailwind CSS                   |
 | **Backend**    | FastAPI (Python)                                 |
 | **AI Providers**| OpenAI, Mistral, Hugging Face, DeepSeek         |
 | **Database**   | DynamoDB or PostgreSQL                           |
@@ -143,11 +143,15 @@ graph TD
 ---
 
 ## 📸 Screenshots
-*(Add real screenshots or replace these placeholders)*
 
-- `📷 Chat Interface`
+- `📷 Tool Interface`
+-  ![image](https://github.com/user-attachments/assets/84860b10-f019-4957-b1fc-ac814c893987)
+
 - `📷 Image Generator`
+- ![image](https://github.com/user-attachments/assets/7ec3a6cc-9294-4aa5-9e2b-b2b6e09a3a00)
+- 
 - `📷 Credit Wallet & Ad Modal`
+- 
 - `📷 Admin Analytics Dashboard`
 
 ---
