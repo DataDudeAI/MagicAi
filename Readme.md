@@ -46,20 +46,19 @@
 | 📊 **Admin Panel** | Usage metrics, ad clicks, credit stats |
 
 ---
+## 🧩 Key Flow Diagram
 
-## 🧠 System Architecture
-## 🧠 System Architecture
-
-### 🌐 High-Level Architecture
 ```mermaid
-graph TD
-  A[User (Web/App)] --> B[Frontend (Streamlit / React)]
-  B --> C[Backend API - FastAPI]
-  C --> D[LLM APIs (OpenAI, HF, etc.)]
-  C --> E[Redis Cache]
-  C --> F[Database (PostgreSQL / DynamoDB)]
-  C --> G[Prompt Marketplace]
-  C --> H[Ad Engine]
+graph TD;
+    A[👤 User Visits Platform] --> B{Has Credits?}
+    B -- Yes --> C[Use AI Tool 🚀]
+    B -- No --> D[Watch Ad 🎥]
+    D --> E[🎁 Earn Credits]
+    E --> C
+    C --> F[Call FastAPI Endpoint]
+    F --> G[Trigger AI Model API]
+    G --> H[Cache with Redis]
+    H --> I[Store in DynamoDB]
 ```
 
 ### 🧩 Modular Services Flow
