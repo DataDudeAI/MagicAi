@@ -48,7 +48,9 @@
 ---
 
 ## 🧠 System Architecture
+## 🧠 System Architecture
 
+### 🌐 High-Level Architecture
 ```mermaid
 graph TD
   A[User (Web/App)] --> B[Frontend (Streamlit / React)]
@@ -58,20 +60,24 @@ graph TD
   C --> F[Database (PostgreSQL / DynamoDB)]
   C --> G[Prompt Marketplace]
   C --> H[Ad Engine]
-
 ```
 
 ### 🧩 Modular Services Flow
 ```mermaid
-graph TD
-  A[User (Web/App)] --> B[Frontend (Streamlit / React)]
-  B --> C[Backend API - FastAPI]
-  C --> D[LLM APIs (OpenAI, HF, etc.)]
-  C --> E[Redis Cache]
-  C --> F[Database (PostgreSQL / DynamoDB)]
-  C --> G[Prompt Marketplace]
-  C --> H[Ad Engine]
+graph LR
+  A[Frontend] --> B[Auth Service]
+  A --> C[Credit Manager]
+  A --> D[AI Gateway]
+  A --> E[Prompt Library]
+  A --> F[Ad Tracker]
+
+  B --> G[JWT Tokens]
+  C --> H[Credit Wallet]
+  D --> I[LLM Selector]
+  D --> J[Text / Image / Speech]
+  F --> K[Ad Frequency Logic]
 ```
+
 
 ### 🧠 AI Pipeline (Text | Image | Audio)
 ```mermaid
