@@ -1,4 +1,4 @@
-🚀 Comprehensive Strategy for Building an AI Tools Platform with Ad-Based Monetization (AWS Focused for 1 Lakh DAUs)
+🚀 Comprehensive Strategy for Building an AI Tools Platform with Ad-Based Monetization
 🔍 Vision
 Build a low-cost yet scalable AI tools platform where users can access various AI services (text, image, audio, etc.) by watching ads. Each tool will have dynamic credit allocation — text tools (1 min ad), image tools (2 min ad), etc.
 
