@@ -49,7 +49,6 @@
 
 ## 🧠 System Architecture
 
-### 🌐 High-Level Architecture
 ```mermaid
 graph TD
   A[User (Web/App)] --> B[Frontend (Streamlit / React)]
@@ -59,6 +58,7 @@ graph TD
   C --> F[Database (PostgreSQL / DynamoDB)]
   C --> G[Prompt Marketplace]
   C --> H[Ad Engine]
+
 ```
 
 ### 🧩 Modular Services Flow
