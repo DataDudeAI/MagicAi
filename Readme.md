@@ -82,5 +82,30 @@ D --> I[LLM Selector]
 D --> J[Text/Image/Speech]
 F --> K[Ad Frequency Logic]
 
+### 🧠 AI Pipeline (Text / Image / Audio)
+graph TD
+A[User Request] --> B[FastAPI Router]
+B --> C[LLM Engine Selector]
+C --> D1[OpenAI]
+C --> D2[Mistral]
+C --> D3[Hugging Face]
+C --> E[Post-Processor]
+E --> F[Frontend Output]
 
+### 💳 Credit Usage + Ad Monetization
+graph TD
+A[User] --> B[Uses AI Service]
+B --> C[Credits Deducted]
+C --> D[Below Threshold?]
+D -- Yes --> E[Watch Ad]
+D -- No --> F[Continue Access]
+E --> G[Add Credits]
+G --> B
+
+### 🛡️ Admin Dashboard Flow
+graph TD
+A[Admin Panel] --> B[User Logs]
+A --> C[Credit Stats]
+A --> D[Prompt Analytics]
+A --> E[Ad Click Logs]
 
