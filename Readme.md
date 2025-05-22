@@ -63,18 +63,14 @@ graph TD
 
 ### 🧩 Modular Services Flow
 ```mermaid
-graph LR
-  A[Frontend] --> B[Auth Service]
-  A --> C[Credit Manager]
-  A --> D[AI Gateway]
-  A --> E[Prompt Library]
-  A --> F[Ad Tracker]
-
-  B --> G[JWT Tokens]
-  C --> H[Credit Wallet]
-  D --> I[LLM Selector]
-  D --> J[Text / Image / Speech]
-  F --> K[Ad Frequency Logic]
+graph TD
+  A[User (Web/App)] --> B[Frontend (Streamlit / React)]
+  B --> C[Backend API - FastAPI]
+  C --> D[LLM APIs (OpenAI, HF, etc.)]
+  C --> E[Redis Cache]
+  C --> F[Database (PostgreSQL / DynamoDB)]
+  C --> G[Prompt Marketplace]
+  C --> H[Ad Engine]
 ```
 
 ### 🧠 AI Pipeline (Text | Image | Audio)
