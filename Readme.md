@@ -118,42 +118,6 @@ GenAiToolbox/
 
 
 
-
-🔐 Security Best Practices
-✅ AWS Cognito for user authentication.
-✅ IAM Role Management to control resource access.
-✅ Use CloudWatch for monitoring performance and security threats.
-✅ Implement Rate Limiting for API abuse prevention.
-✅ Set SSL/TLS encryption for secure data transmission.
-
-📈 Scaling Strategy for 1 Lakh DAUs
-✅ ECS Auto-Scaling Policies: Use CPU & Memory-based scaling triggers.
-✅ DynamoDB Auto-Scaling: Set capacity limits with automatic scale-up.
-✅ Implement Cloudflare CDN for fast content delivery.
-✅ Optimize API requests using batch processing to minimize load.
-✅ Use Lambda Edge for regional content caching.
-
-🔊 Ad Revenue Optimization Strategy
-✅ Use Google AdSense Video Ads for high-payout ads.
-✅ Add Interactive Ads to boost engagement.
-✅ Introduce Rewarded Ads (watch longer ads for bonus credits).
-✅ Implement a Referral System to increase user retention.
-
-✅ Step-by-Step Development Plan
-1️⃣ Create Streamlit Frontend → Design dynamic UI with credit-based access.
-2️⃣ Build Backend (FastAPI/Flask) → Integrate AI model APIs with token logic.
-3️⃣ Set Up Ad Management System → Implement Google AdSense/AdMob integration.
-4️⃣ Implement Credit-Based Workflow → Map credit logic to ad-watch duration.
-5️⃣ Optimize AI Model Costs → Use caching (Redis) to reduce redundant calls.
-6️⃣ Deploy on AWS ECS + Fargate → Set up auto-scaling for cost control.
-7️⃣ Add Analytics → Track user behavior, ad conversion, and credit consumption.
-
-🎯 Bonus Features for Maximum Engagement
-✅ Leaderboard System: Users earn bonus credits by inviting friends.
-✅ Daily Login Rewards: Encourage repeat visits with small bonuses.
-✅ Premium Subscription Model: Offer ad-free premium access with special tools.
-✅ Limited-Time Offers: Drive engagement with exclusive tool unlocks.
-
 # MegicAI Platform
 
 Multi-provider AI platform with credit system and ad-based monetization.
@@ -178,7 +142,7 @@ Multi-provider AI platform with credit system and ad-based monetization.
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/megicai.git
+   git clone https://github.com/DataDudeAI/MagicAi.git
    cd megicai
    ```
 
@@ -193,7 +157,7 @@ Multi-provider AI platform with credit system and ad-based monetization.
    ```
 
 4. Access the application:
-   - Frontend: http://localhost:8501
+   - Frontend: http://localhost:8006
    - Backend API: http://localhost:8000
 
 ## Development Setup
@@ -205,12 +169,7 @@ Multi-provider AI platform with credit system and ad-based monetization.
 
 2. Run backend server only:
    ```
-   python backend/run_server.py backend.api_minimal
-   ```
-
-3. Run frontend only:
-   ```
-   streamlit run frontend/main.py
+   python app.py
    ```
 
 ## Production Deployment
@@ -327,67 +286,3 @@ APP_NAME="AI Tool Hub"
 @app.post("/api/ads/claim")
 @app.get("/api/ads/status")
 @app.post("/api/admin/update-credits")
-
-
-
-
-
-This is an "AI Tool Hub" - a sophisticated platform that provides access to various AI services through an ad-based credit system. Here are the key aspects:
-Core Purpose:
-Provides access to various AI tools (text, image, audio) through a credit-based system
-Users earn credits by watching ads (different durations for different tools)
-Targets handling 100,000 Daily Active Users (DAUs)
-Technical Stack:
-Backend: FastAPI (Python)
-Frontend: HTML/CSS/JS with Jinja2 templating
-Database: SQLite (with potential to scale to DynamoDB/PostgreSQL)
-AI Providers: Multiple integrations including:
-HuggingFace
-OpenAI
-DeepSeek
-OpenRouter
-Key Features:
-User Authentication System
-Credit Management System
-Ad Integration (Google AdSense)
-Multiple AI Tool Types:
-Text Models (1 min ad → 5 credits)
-Image Models (2 min ad → 10 credits)
-Video Models (3 min ad → 15 credits)
-Prompt Marketplace
-Admin Dashboard
-Result Caching System
-Project Structure:
-app.py: Main FastAPI application
-models.py: Database models
-tools.py: Tool definitions
-providers/: AI provider integrations
-prompts/: Prompt management system
-ads/: Advertisement system integration
-static/: Static assets (CSS/JS)
-templates/: HTML templates
-Monetization Strategy:
-Ad-based revenue model
-Dynamic credit allocation based on tool type
-Premium subscription option
-Referral system
-Daily login rewards
-Security Features:
-API key authentication
-Session management
-Rate limiting
-Secure password handling
-Role-based access control
-Scalability Considerations:
-Designed for 100,000 DAUs
-Caching implementation
-Provider fallback mechanism
-Modular architecture
-Prepared for cloud deployment (AWS-focused)
-Unique Features:
-Custom prompt marketplace
-Multi-provider fallback system
-User prompt history tracking
-Rating system for prompts
-Dynamic credit pricing based on tool type
-Daily and special rewards system
