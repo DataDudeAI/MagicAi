@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.animated-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -1;
+  background: linear-gradient(120deg, #6a82fb 0%, #fc5c7d 100%);
+  overflow: hidden;
+}
+.animated-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.25;
+  animation: float 8s ease-in-out infinite;
+}
+.shape1 { width: 400px; height: 400px; background: #ffb347; left: 5vw; top: 10vh; animation-delay: 0s; }
+.shape2 { width: 300px; height: 300px; background: #6a82fb; right: 10vw; top: 30vh; animation-delay: 2s; }
+.shape3 { width: 250px; height: 250px; background: #fc5c7d; left: 40vw; bottom: 5vh; animation-delay: 4s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-40px) scale(1.05); }
+}
+</style>
+<div class="animated-bg">
+  <div class="animated-shape shape1"></div>
+  <div class="animated-shape shape2"></div>
+  <div class="animated-shape shape3"></div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center mb-4">
+            <div class="me-3" style="font-size:2.5rem;"><i class="{{ tool.icon }}"></i></div>
+            <div>
+              <h2 class="fw-bold mb-1">{{ tool.name }}</h2>
+              <p class="mb-0 text-muted">{{ tool.description }}</p>
+            </div>
+          </div>
+          <form id="tool-form" action="{% if user_credits >= tool.cost %}/process-request{% else %}/watch-ad/{{ tool.id }}{% endif %}" method="post" data-async-submit="true" data-success-target="form-success" data-error-target="form-error">
+            <input type="hidden" name="tool_id" value="{{ tool.id }}">
+            <div class="mb-3">
+              <label for="prompt" class="form-label fw-semibold">Enter your prompt:</label>
+              <textarea id="prompt" name="prompt" class="form-control" rows="4" placeholder="Describe what you want to generate..." required></textarea>
+            </div>
+            {% if suggestions %}
+            <div class="mb-3">
+              <div class="mb-1 text-muted small">Suggestions:</div>
+              {% for suggestion in suggestions %}
+                <button type="button" class="btn btn-light btn-sm me-2 mb-2" onclick="addSuggestionToPrompt('{{ suggestion }}', 'prompt')">{{ suggestion }}</button>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="provider" class="form-label">Select AI Provider:</label>
+                <select id="provider" name="provider" class="form-select">
+                  {% for provider in tool.providers %}
+                    <option value="{{ provider }}" {% if provider == "openrouter" %}selected{% endif %}>{{ provider|title }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="model" class="form-label">Select Model:</label>
+                <select id="model" name="model" class="form-select">
+                  <option value="default">Default</option>
+                  <option value="premium">Premium</option>
+                  <option value="economy">Economy</option>
+                </select>
+              </div>
+            </div>
+            <div id="form-error" class="alert alert-danger" style="display: none;"></div>
+            <div id="form-success" class="alert alert-success" style="display: none;"></div>
+            <div class="d-flex flex-wrap gap-3 mt-4">
+              <button type="submit" class="btn btn-warning btn-lg px-4">
+                {% if user_credits >= tool.cost %}
+                  Generate ({{ tool.cost }} credits)
+                {% else %}
+                  Watch Ad to Earn Credits
+                {% endif %}
+              </button>
+              <a href="/" class="btn btn-outline-light btn-lg px-4">Back to Tools</a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card bg-light shadow-sm border-0 mb-4">
+            <div class="card-body text-center">
+              <h5 class="mb-3">Credit Cost</h5>
+              <div class="display-6 fw-bold text-warning">{{ tool.cost }}</div>
+              <div class="text-muted">credits per generation</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card bg-light shadow-sm border-0 mb-4">
+            <div class="card-body text-center">
+              <h5 class="mb-3">Your Balance</h5>
+              <div class="display-6 fw-bold text-primary">{{ user_credits }}</div>
+              <div class="text-muted">Available credits</div>
+              {% if user_credits < tool.cost %}
+              <div class="alert alert-warning mt-3">
+                <i class="fas fa-exclamation-triangle"></i>
+                You need {{ tool.cost - user_credits }} more credits
+              </div>
+              <button type="button" class="btn btn-primary w-100 mt-2" onclick="openAdModal('{{ tool.id }}')">
+                Watch {{ tool.ad_duration }}s Ad (+ {{ tool.cost }} credits)
+              </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center mt-4">
+        <div class="col-12 col-md-10">
+          <div class="card bg-light shadow-sm border-0 text-center p-4">
+            <h5 class="mb-3">Sponsored Ad</h5>
+            <div id="ad-container">
+              <script src="/static/js/ads.js"></script>
+              <div id="ad-slot">
+                <!-- Ad will be loaded here by your ad system -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ad Reward Modal -->
+<div id="adRewardModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#222; padding:2em; border-radius:1em; text-align:center; max-width:700px; margin:auto; box-shadow:0 8px 32px #0008;">
+    <h2 style="color:#46e5c3;">Watch an ad to earn credits</h2>
+    <video id="adVideo" controls width="600" style="background:#111; border-radius:1em; box-shadow:0 4px 16px #0006;">
+      <source src="/static/video/sample.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div style="margin:1.5em 0;">
+      <div id="progressBar" style="height:16px; background:#333; border-radius:8px; overflow:hidden; margin-bottom:0.5em;">
+        <div id="progressFill" style="height:100%; width:0; background:linear-gradient(90deg,#46e5c3,#4f46e5); transition:width 0.2s;"></div>
+      </div>
+      <span id="timeLeft" style="color:#fff; font-size:1.1em;">60s left</span>
+    </div>
+    <div id="rewardMsg" style="display:none; margin-top:2em; color:#46e5c3; font-size:1.5em; font-weight:bold;">
+      <span id="creditAnim" style="display:inline-block; animation:bounce 1s;">+5 credits!</span>
+    </div>
+    <button onclick="closeAdModal()" style="margin-top:1em; display:none;" id="closeAdBtn" class="btn btn-success">Close</button>
+  </div>
+</div>
+<style>
+@keyframes bounce {
+  0%   { transform: scale(1);}
+  30%  { transform: scale(1.3);}
+  50%  { transform: scale(0.95);}
+  70%  { transform: scale(1.1);}
+  100% { transform: scale(1);}
+}
+</style>
+<script>
+function addSuggestionToPrompt(text, id) {
+  const textarea = document.getElementById(id);
+  if (textarea) textarea.value = text;
+}
+
+function openAdModal(toolId) {
+  document.getElementById('adRewardModal').style.display = 'flex';
+  document.getElementById('rewardMsg').style.display = 'none';
+  document.getElementById('closeAdBtn').style.display = 'none';
+  document.getElementById('progressFill').style.width = '0';
+  document.getElementById('timeLeft').textContent = '60s left';
+  const video = document.getElementById('adVideo');
+  video.currentTime = 0;
+  video.style.display = '';
+  let watchedTime = 0, lastTime = 0, rewarded = false;
+  const MIN_WATCH_TIME = 60;
+  video.onplay = () => { lastTime = 0; watchedTime = 0; rewarded = false; };
+  video.ontimeupdate = function() {
+    if (video.currentTime > lastTime) watchedTime += video.currentTime - lastTime;
+    lastTime = video.currentTime;
+    let percent = Math.min(100, (watchedTime / MIN_WATCH_TIME) * 100);
+    document.getElementById('progressFill').style.width = percent + '%';
+    let left = Math.max(0, Math.ceil(MIN_WATCH_TIME - watchedTime));
+    document.getElementById('timeLeft').textContent = left + 's left';
+    if (!rewarded && watchedTime >= MIN_WATCH_TIME) {
+      rewarded = true;
+      document.getElementById('timeLeft').textContent = '0s left';
+      fetch('/api/reward-ad', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ tool_id: toolId }),
+        credentials: 'include'
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          video.style.display = 'none';
+          document.getElementById('rewardMsg').style.display = '';
+          document.getElementById('closeAdBtn').style.display = '';
+        } else {
+          alert(data.message || "Reward failed");
+        }
+      });
+    }
+  };
+}
+function closeAdModal() {
+  document.getElementById('adRewardModal').style.display = 'none';
+}
+</script>
+{% if tool %}
+  <!-- Your existing code that uses tool.icon, tool.name, etc. -->
+{% else %}
+  <div class="alert alert-warning">No tool found.</div>
+{% endif %}
+{% endblock %} 

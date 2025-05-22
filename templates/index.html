@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.animated-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -1;
+  background: linear-gradient(120deg, #6a82fb 0%, #fc5c7d 100%);
+  overflow: hidden;
+}
+.animated-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.25;
+  animation: float 8s ease-in-out infinite;
+}
+.shape1 { width: 400px; height: 400px; background: #ffb347; left: 5vw; top: 10vh; animation-delay: 0s; }
+.shape2 { width: 300px; height: 300px; background: #6a82fb; right: 10vw; top: 30vh; animation-delay: 2s; }
+.shape3 { width: 250px; height: 250px; background: #fc5c7d; left: 40vw; bottom: 5vh; animation-delay: 4s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-40px) scale(1.05); }
+}
+</style>
+<div class="animated-bg">
+  <div class="animated-shape shape1"></div>
+  <div class="animated-shape shape2"></div>
+  <div class="animated-shape shape3"></div>
+</div>
+<div class="container py-5">
+  <div class="row align-items-center mb-5">
+    <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+      <h1 class="display-3 fw-bold text-white">Welcome to {{ app_name }}</h1>
+      <p class="lead text-white-50">Access powerful AI tools for text, image, audio, and more. Earn credits, explore, and create!</p>
+      <div class="mt-4">
+        <a href="/register" class="btn btn-warning btn-lg me-2">Get Started</a>
+        <a href="/login" class="btn btn-outline-light btn-lg">Sign In</a>
+        <button class="btn btn-success btn-lg ms-2" onclick="openAdModal('homepage')">Watch Ad to Earn Credits</button>
+      </div>
+    </div>
+    <div class="col-lg-6 text-center">
+      <img src="/static/img/ai-hero.svg" alt="AI Tools" class="img-fluid" style="max-height: 320px;">
+    </div>
+  </div>
+  <div class="mb-4">
+    <h2 class="fw-semibold mb-3 text-center text-white">Featured Tools</h2>
+    <div class="row g-4 justify-content-center">
+      {% for tool in tools %}
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="tool-card card h-100 shadow-sm position-relative p-3" style="border-radius:1.2em;">
+          <div class="d-flex align-items-center mb-2">
+            <div class="icon-square bg-light rounded-3 me-2" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;">
+              <i class="{{ tool.icon }}" style="font-size:1.5rem; color:#4f46e5;"></i>
+            </div>
+            {% if tool.is_popular %}
+              <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2" style="font-size:0.85rem;">Popular</span>
+            {% endif %}
+          </div>
+          <h5 class="card-title mb-1">{{ tool.name }}</h5>
+          <p class="card-text small text-muted">{{ tool.description }}</p>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted" style="font-size:0.95em;">
+              <i class="far fa-clock me-1"></i>
+              {% if tool.ad_duration is defined and tool.ad_duration is not none %}
+                {{ (tool.ad_duration // 60) if tool.ad_duration >= 60 else tool.ad_duration }} min ad
+              {% else %}
+                No ad info
+              {% endif %}
+            </span>
+            <span class="text-muted" style="font-size:0.95em;">
+              <i class="fas fa-bolt me-1"></i>
+              From {{ tool.credits|default(tool.cost, true) }} credits
+            </span>
+          </div>
+          {% if user_credits < (tool.credits|default(tool.cost, true)) %}
+            <div class="alert alert-info p-2 mb-2 small">
+              <i class="fas fa-info-circle"></i>
+              Watch {{ ((tool.credits|default(tool.cost, true) - user_credits) // (tool.ad_reward|default(1, true)))|int + 1 }} ad(s) to unlock
+            </div>
+          {% endif %}
+          <a href="/tool/{{ tool.id }}" class="btn btn-primary w-100" style="background: linear-gradient(90deg, #4f46e5 0%, #46e5c3 100%); border: none;">Use Tool</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div id="no-results" style="display: none; text-align: center; margin-top: 40px;">
+      <i class="fas fa-search fa-3x" style="opacity: 0.5; margin-bottom: 15px;"></i>
+      <h3>No tools found</h3>
+      <p>Try different search terms or browse all categories</p>
+      <button class="btn btn-secondary" onclick="resetSearch()">Show All Tools</button>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-5">
+    <div class="col-12 col-md-8 mb-4">
+      <div class="card bg-dark text-white shadow-sm border-0 text-center p-4">
+        <h4 class="mb-3">Featured Video</h4>
+        <video id="main-video-player" class="w-100" controls poster="/static/img/ai-hero.svg" style="max-height:360px; background:#222;">
+          <source src="/static/video/sample.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="small text-muted mt-2">(Add your video to <code>static/video/sample.mp4</code> to change this.)</div>
+      </div>
+    </div>
+    <div class="col-12 col-md-8">
+      <div class="card bg-light shadow-sm border-0 text-center p-4">
+        <h4 class="mb-3">Sponsored Ad</h4>
+        <div id="ad-container">
+          <script src="/static/js/ads.js"></script>
+          <div id="ad-slot">
+            <!-- Ad will be loaded here by your ad system -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ad Reward Modal -->
+<div id="adRewardModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#222; padding:2em; border-radius:1em; text-align:center; max-width:700px; margin:auto;">
+    <h2>Watch an ad to earn credits</h2>
+    <video id="adVideo" controls width="600" style="background:#111;">
+      <source src="/static/video/sample.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div id="rewardMsg" style="display:none; margin-top:2em; color:#46e5c3; font-size:1.2em;">
+      🎉 Credits added to your wallet!
+    </div>
+    <button onclick="closeAdModal()" style="margin-top:1em; display:none;" id="closeAdBtn">Close</button>
+  </div>
+</div>
+
+<script>
+// Search tools
+function searchTools() {
+  const searchTerm = document.getElementById('tool-search')?.value.toLowerCase() || '';
+  const toolCards = document.querySelectorAll('.tool-card');
+  const noResults = document.getElementById('no-results');
+  let visibleCount = 0;
+  toolCards.forEach(card => {
+    const name = card.querySelector('.tool-name').textContent.toLowerCase();
+    const description = card.querySelector('.tool-description').textContent.toLowerCase();
+    if (name.includes(searchTerm) || description.includes(searchTerm)) {
+      card.parentElement.style.display = '';
+      visibleCount++;
+    } else {
+      card.parentElement.style.display = 'none';
+    }
+  });
+  if (noResults) noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+}
+function resetSearch() {
+  document.getElementById('tool-search').value = '';
+  searchTools();
+}
+
+function openAdModal(toolId) {
+  document.getElementById('adRewardModal').style.display = 'flex';
+  document.getElementById('rewardMsg').style.display = 'none';
+  document.getElementById('closeAdBtn').style.display = 'none';
+  const video = document.getElementById('adVideo');
+  video.currentTime = 0;
+  video.style.display = '';
+  let watchedTime = 0, lastTime = 0, rewarded = false;
+  const MIN_WATCH_TIME = 60;
+  video.onplay = () => { lastTime = 0; watchedTime = 0; rewarded = false; };
+  video.ontimeupdate = function() {
+    if (video.currentTime > lastTime) watchedTime += video.currentTime - lastTime;
+    lastTime = video.currentTime;
+    if (!rewarded && watchedTime >= MIN_WATCH_TIME) {
+      rewarded = true;
+      fetch('/api/reward-ad', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ tool_id: toolId }),
+        credentials: 'include'
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          video.style.display = 'none';
+          document.getElementById('rewardMsg').style.display = '';
+          document.getElementById('closeAdBtn').style.display = '';
+        } else {
+          alert(data.message || "Reward failed");
+        }
+      });
+    }
+  };
+}
+function closeAdModal() {
+  document.getElementById('adRewardModal').style.display = 'none';
+}
+</script>
+{% endblock %} 

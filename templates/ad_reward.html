@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block title %}Watch Ad & Earn Credits{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="reward-section">
+        <h1>Watch & Earn Credits</h1>
+        <p class="reward-description">Watch a short video ad to earn credits for using AI tools.</p>
+        
+        <div class="reward-info">
+            <div class="reward-card">
+                <i class="fas fa-coins"></i>
+                <div class="reward-details">
+                    <h3>Reward Amount</h3>
+                    <p>10 Credits</p>
+                </div>
+            </div>
+            <div class="reward-card">
+                <i class="fas fa-clock"></i>
+                <div class="reward-details">
+                    <h3>Video Duration</h3>
+                    <p>~30-60 seconds</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="adContainer" class="ad-container"></div>
+
+        <button id="watchAdBtn" class="btn btn-primary watch-ad-btn">
+            <i class="fas fa-play-circle"></i>
+            Watch Video to Earn Credits
+        </button>
+
+        <div class="reward-rules">
+            <h3>How it works:</h3>
+            <ul>
+                <li>Click the button above to start the video ad</li>
+                <li>Watch the entire video without interruption</li>
+                <li>Earn credits immediately after completion</li>
+                <li>You can earn up to 3 rewards per day</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="rewardModal" class="modal">
+    <div class="modal-content">
+        <h2>Congratulations!</h2>
+        <p>You've earned <span class="earned-credits">10</span> credits!</p>
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="location.reload()">Earn More</button>
+            <a href="{{ return_url or url_for('home') }}" class="btn btn-secondary">Continue</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let adManager;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize ad manager
+    adManager = new AdManager();
+    adManager.init('adContainer');
+
+    // Add click handler to watch button
+    document.getElementById('watchAdBtn').addEventListener('click', function() {
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading Ad...';
+        
+        // Request rewarded video ad
+        adManager.requestRewardedAd(
+            // Your Google Ad Manager tag URL for rewarded video ads
+            'https://pubads.g.doubleclick.net/gampad/ads?' +
+            'iu=/YOUR_AD_UNIT_PATH' +
+            '&description_url=' + encodeURIComponent(window.location.href) +
+            '&tfcd=0&npa=0&sz=640x480&gdfp_req=1&output=vast' +
+            '&unviewed_position_start=1&env=vp&impl=s&correlator=',
+            
+            // On ad start
+            (duration) => {
+                console.log('Ad started, duration:', duration);
+                this.style.display = 'none';
+            },
+            
+            // On ad complete
+            (success, error) => {
+                if (success) {
+                    // Send completion to server
+                    fetch('/api/ads/claim', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            type: 'daily'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success modal
+                            const modal = document.getElementById('rewardModal');
+                            modal.style.display = 'flex';
+                            
+                            // Update credits display in header
+                            const creditsDisplay = document.querySelector('.credits-display span');
+                            if (creditsDisplay) {
+                                creditsDisplay.textContent = `${data.current_credits} Credits`;
+                            }
+                        } else {
+                            showToast(data.error || 'Failed to claim reward', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error claiming reward:', error);
+                        showToast('Failed to claim reward', 'error');
+                    });
+                } else {
+                    // Re-enable button on error
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-play-circle"></i> Watch Video to Earn Credits';
+                    showToast('Failed to load ad. Please try again.', 'error');
+                }
+            }
+        );
+    });
+});
+</script>
+
+<style>
+.reward-section {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.reward-description {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+}
+
+.reward-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.reward-card {
+    background: var(--card-background);
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: var(--shadow);
+}
+
+.reward-card i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.reward-details h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.reward-details p {
+    margin: 5px 0 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.watch-ad-btn {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 30px auto;
+    padding: 15px;
+    font-size: 1.1rem;
+}
+
+.watch-ad-btn i {
+    margin-right: 8px;
+}
+
+.reward-rules {
+    background: var(--card-background);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 30px;
+    box-shadow: var(--shadow);
+}
+
+.reward-rules h3 {
+    margin-top: 0;
+    color: var(--text-primary);
+}
+
+.reward-rules ul {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--text-secondary);
+}
+
+.reward-rules li {
+    margin-bottom: 8px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+}
+
+.modal-content {
+    background: var(--card-background);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--text-primary);
+}
+
+.earned-credits {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions .btn {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .reward-info {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %} 

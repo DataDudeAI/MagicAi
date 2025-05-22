@@ -1,0 +1,103 @@
+{
+    "text-generation": {
+        "optimal_models": {
+            "openai": {
+                "default": "gpt-4",
+                "creative": "gpt-4",
+                "technical": "gpt-4",
+                "fallback": "gpt-3.5-turbo"
+            },
+            "openrouter": {
+                "default": "anthropic/claude-2",
+                "creative": "anthropic/claude-2",
+                "technical": "meta-llama/llama-2-70b-chat",
+                "fallback": "meta-llama/llama-2-70b-chat"
+            },
+            "huggingface": {
+                "default": "mistralai/Mistral-7B-Instruct-v0.2",
+                "creative": "mistralai/Mixtral-8x7B-Instruct-v0.1",
+                "technical": "mistralai/Mistral-7B-Instruct-v0.2",
+                "fallback": "mistralai/Mistral-7B-Instruct-v0.2"
+            }
+        },
+        "capabilities": [
+            "Long-form content generation",
+            "Creative writing",
+            "Technical documentation",
+            "Story generation",
+            "Report writing"
+        ],
+        "best_providers": ["openai", "openrouter", "huggingface"],
+        "context_length": {
+            "gpt-4": 8192,
+            "claude-2": 100000,
+            "llama-2-70b-chat": 4096,
+            "Mistral-7B-Instruct-v0.2": 8192
+        }
+    },
+    "code-generation": {
+        "optimal_models": {
+            "openai": {
+                "default": "gpt-4",
+                "python": "gpt-4",
+                "javascript": "gpt-4",
+                "fallback": "gpt-3.5-turbo"
+            },
+            "openrouter": {
+                "default": "meta-llama/codellama-34b-instruct",
+                "python": "meta-llama/codellama-34b-instruct",
+                "javascript": "meta-llama/codellama-34b-instruct",
+                "fallback": "meta-llama/llama-2-70b-chat"
+            },
+            "deepseek": {
+                "default": "deepseek-ai/deepseek-coder-33b-instruct",
+                "python": "deepseek-ai/deepseek-coder-33b-instruct",
+                "javascript": "deepseek-ai/deepseek-coder-33b-instruct",
+                "fallback": "deepseek-ai/deepseek-chat-7b"
+            }
+        },
+        "capabilities": [
+            "Code completion",
+            "Function generation",
+            "Code optimization",
+            "Bug fixing",
+            "Code explanation"
+        ],
+        "best_providers": ["openai", "deepseek", "openrouter"],
+        "supported_languages": [
+            "Python",
+            "JavaScript",
+            "TypeScript",
+            "Java",
+            "C++",
+            "Go",
+            "Rust"
+        ]
+    },
+    "image-generation": {
+        "optimal_models": {
+            "openai": {
+                "default": "dall-e-3",
+                "high_quality": "dall-e-3",
+                "fallback": "dall-e-2"
+            },
+            "huggingface": {
+                "default": "stabilityai/stable-diffusion-xl-base-1.0",
+                "high_quality": "stabilityai/stable-diffusion-xl-base-1.0",
+                "fallback": "stabilityai/stable-diffusion-2-1"
+            }
+        },
+        "capabilities": [
+            "Photo-realistic images",
+            "Artistic renderings",
+            "Logo design",
+            "Character design",
+            "Scene composition"
+        ],
+        "best_providers": ["openai", "huggingface"],
+        "supported_sizes": {
+            "dall-e-3": ["1024x1024", "1792x1024", "1024x1792"],
+            "stable-diffusion-xl": ["1024x1024"]
+        }
+    }
+} 

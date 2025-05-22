@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Terms of Service - AI Tool Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="content-box">
+        <h1>Terms of Service</h1>
+        <p class="lead">Last updated: {{ now().strftime('%B %d, %Y') }}</p>
+
+        <section class="mt-4">
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing and using AI Tool Hub, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.</p>
+        </section>
+
+        <section class="mt-4">
+            <h2>2. Use of Service</h2>
+            <p>Our service provides access to various AI tools through a credit-based system. Users can earn credits through various means including watching ads or purchasing credit packages.</p>
+            <ul>
+                <li>You must be at least 13 years old to use this service</li>
+                <li>You are responsible for maintaining the security of your account</li>
+                <li>You must not abuse or misuse our services</li>
+                <li>Credits are non-refundable and non-transferable</li>
+            </ul>
+        </section>
+
+        <section class="mt-4">
+            <h2>3. Content Guidelines</h2>
+            <p>Users agree not to use our services to:</p>
+            <ul>
+                <li>Generate or distribute harmful, illegal, or inappropriate content</li>
+                <li>Violate intellectual property rights</li>
+                <li>Harass, abuse, or harm others</li>
+                <li>Spread misinformation or engage in deceptive practices</li>
+            </ul>
+        </section>
+
+        <section class="mt-4">
+            <h2>4. Credits and Payments</h2>
+            <p>Our credit system operates under the following terms:</p>
+            <ul>
+                <li>Credits can be earned through watching ads or purchased</li>
+                <li>Purchased credits are non-refundable</li>
+                <li>We reserve the right to modify credit costs for services</li>
+                <li>Fraudulent credit acquisition will result in account termination</li>
+            </ul>
+        </section>
+
+        <section class="mt-4">
+            <h2>5. Privacy</h2>
+            <p>Your privacy is important to us. Please review our <a href="{{ url_for('privacy_page') }}">Privacy Policy</a> to understand how we collect, use, and protect your data.</p>
+        </section>
+
+        <section class="mt-4">
+            <h2>6. Modifications</h2>
+            <p>We reserve the right to modify these terms at any time. We will notify users of any material changes via email or through our platform.</p>
+        </section>
+
+        <section class="mt-4">
+            <h2>7. Contact</h2>
+            <p>If you have any questions about these Terms of Service, please contact us at support@aitoolhub.com</p>
+        </section>
+    </div>
+</div>
+
+<style>
+.content-box {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content-box h1 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.content-box h2 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    margin-top: 2rem;
+}
+
+.content-box p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.content-box ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.content-box li {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.lead {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+</style>
+{% endblock %} 

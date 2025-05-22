@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4 fw-bold">Sign Up</h2>
+          {% if error %}
+          <div class="alert alert-danger">{{ error }}</div>
+          {% endif %}
+          <form method="POST" action="/register" class="needs-validation" novalidate autocomplete="off">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" required pattern="^[a-zA-Z0-9_]{3,20}$" title="3-20 characters, letters, numbers, underscores only">
+              <div class="invalid-feedback">Please enter a valid username.</div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+              <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" title="At least 8 characters, include letters and numbers">
+              <div class="invalid-feedback">Password must be at least 8 characters and include letters and numbers.</div>
+            </div>
+            <div class="mb-3">
+              <label for="confirm_password" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+              <div class="invalid-feedback">Passwords do not match.</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold">Sign Up</button>
+            <div class="text-center mt-3">
+              <span class="text-muted">Already have an account? <a href="/login" class="text-primary">Sign in</a></span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const password = document.getElementById('password');
+const confirmPassword = document.getElementById('confirm_password');
+function validatePassword() {
+    if (password.value !== confirmPassword.value) {
+        confirmPassword.setCustomValidity("Passwords do not match");
+    } else {
+        confirmPassword.setCustomValidity('');
+    }
+}
+password.onchange = validatePassword;
+confirmPassword.onkeyup = validatePassword;
+(function () {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            validatePassword();
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+{% endblock %} 

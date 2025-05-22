@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Watch Ad for {{ tool_id }}</title>
+</head>
+<body style="background:#111; color:#fff; text-align:center; padding:2em;">
+    <h2>Watch an ad to use <span style="color:#46e5c3;">{{ tool_id }}</span></h2>
+    <video id="adVideo" controls width="600" style="margin-top:2em; background:#222;">
+        <source src="/static/video/sample.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div id="rewardMsg" style="display:none; margin-top:2em; color:#46e5c3; font-size:1.2em;">
+        🎉 Credits added to your wallet!
+    </div>
+    <p style="margin-top:2em; color:#aaa;">After watching the ad, you will be able to use this tool.</p>
+    <script>
+    const MIN_WATCH_TIME = 60; // seconds
+    let watchedTime = 0;
+    let lastTime = 0;
+    let rewarded = false;
+    const video = document.getElementById('adVideo');
+    video.addEventListener('timeupdate', function() {
+        if (video.currentTime > lastTime) {
+            watchedTime += video.currentTime - lastTime;
+        }
+        lastTime = video.currentTime;
+        if (!rewarded && watchedTime >= MIN_WATCH_TIME) {
+            rewarded = true;
+            fetch('/api/reward-ad', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ tool_id: "{{ tool_id }}" }),
+                credentials: 'include'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    video.style.display = 'none';
+                    document.getElementById('rewardMsg').style.display = '';
+                } else {
+                    alert(data.message || "Reward failed");
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html> 

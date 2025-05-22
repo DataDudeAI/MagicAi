@@ -1,0 +1,110 @@
+{
+    "language_models": {
+        "gpt-4": {
+            "provider": "openai",
+            "capabilities": [
+                "Advanced reasoning",
+                "Complex problem solving",
+                "Code generation",
+                "Technical writing"
+            ],
+            "context_length": 8192,
+            "strengths": [
+                "High accuracy",
+                "Strong reasoning",
+                "Follows instructions well",
+                "Good at complex tasks"
+            ],
+            "use_cases": [
+                "Software development",
+                "Technical documentation",
+                "Research analysis",
+                "Creative writing"
+            ]
+        },
+        "claude-2": {
+            "provider": "anthropic",
+            "capabilities": [
+                "Long context understanding",
+                "Technical analysis",
+                "Code generation",
+                "Research synthesis"
+            ],
+            "context_length": 100000,
+            "strengths": [
+                "Very long context",
+                "Nuanced understanding",
+                "Detailed explanations",
+                "Research capabilities"
+            ],
+            "use_cases": [
+                "Document analysis",
+                "Research papers",
+                "Code review",
+                "Content creation"
+            ]
+        },
+        "codellama-34b-instruct": {
+            "provider": "meta",
+            "capabilities": [
+                "Code generation",
+                "Code completion",
+                "Bug fixing",
+                "Code explanation"
+            ],
+            "context_length": 16384,
+            "strengths": [
+                "Strong coding ability",
+                "Multiple languages",
+                "Code understanding",
+                "Technical accuracy"
+            ],
+            "use_cases": [
+                "Software development",
+                "Code review",
+                "Debugging",
+                "Technical documentation"
+            ]
+        }
+    },
+    "image_models": {
+        "dall-e-3": {
+            "provider": "openai",
+            "capabilities": [
+                "Photo-realistic images",
+                "Artistic compositions",
+                "Detailed renderings",
+                "Style adherence"
+            ],
+            "supported_sizes": [
+                "1024x1024",
+                "1792x1024",
+                "1024x1792"
+            ],
+            "strengths": [
+                "High fidelity",
+                "Accurate prompt following",
+                "Consistent style",
+                "Detail preservation"
+            ]
+        },
+        "stable-diffusion-xl": {
+            "provider": "stability-ai",
+            "capabilities": [
+                "High-quality images",
+                "Style transfer",
+                "Artistic rendering",
+                "Character design"
+            ],
+            "supported_sizes": [
+                "1024x1024"
+            ],
+            "strengths": [
+                "Style flexibility",
+                "Creative freedom",
+                "Fast generation",
+                "Cost-effective"
+            ]
+        }
+    }
+} 
