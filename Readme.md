@@ -147,12 +147,13 @@ graph TD
 - `📷 Tool Interface`
 -  ![image](https://github.com/user-attachments/assets/84860b10-f019-4957-b1fc-ac814c893987)
 
-- `📷 Image Generator`
+- `📷 Text Generator`
 - ![image](https://github.com/user-attachments/assets/7ec3a6cc-9294-4aa5-9e2b-b2b6e09a3a00)
-- 
+- ![image](https://github.com/user-attachments/assets/90504ba2-f1fc-4df5-beb8-4b391cb42d53)
+
 - `📷 Credit Wallet & Ad Modal`
-- 
-- `📷 Admin Analytics Dashboard`
+- ![image](https://github.com/user-attachments/assets/ae016e4b-45f8-4fed-9db1-4daf9812e55d)
+![image](https://github.com/user-attachments/assets/fe4a672f-7ec9-4b29-a8f0-eb6e88f3b063)
 
 ---
 
