@@ -68,7 +68,7 @@ C --> H[Ad Engine]
 
 
 ### 🧩 Modular Services Flow
-
+```mermaid
 graph LR
 A[Frontend] --> B[Auth Service]
 A --> C[Credit Manager]
