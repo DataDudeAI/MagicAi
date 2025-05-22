@@ -32,3 +32,76 @@ B --> D[DynamoDB]
 B --> E[Redis Cache]
 B --> F[Ad System]
 B --> G[Prompt Marketplace]
+
+🧩 Core Components
+
+| Layer            | Technologies Used                           |
+| ---------------- | ------------------------------------------- |
+| **Frontend**     | HTML/CSS/JS + Streamlit + React             |
+| **Backend**      | FastAPI / Flask                             |
+| **AI Providers** | Hugging Face, DeepSeek, OpenRouter, Mistral |
+| **Database**     | DynamoDB / PostgreSQL                       |
+| **Cache Layer**  | Redis / ElastiCache                         |
+| **Auth**         | AWS Cognito / Auth0                         |
+| **CDN**          | Cloudflare                                  |
+| **Ads**          | Google AdSense / AdMob / Revcontent         |
+| **Deployment**   | AWS ECS + Fargate                           |
+
+
+🧮 Credit System (Gamified)
+Tool Type	Ad Watch Time	Credits Earned
+📝 Text Models	1 Minute	+5 Credits
+🖼️ Image Models	2 Minutes	+10 Credits
+🎞️ Video Models	3 Minutes	+15 Credits
+
+🔄 Logic: Higher-resource models require longer ad views for balance and fairness.
+
+
+🏗️ System Flow
+✅ User selects an AI tool
+✅ Platform checks credit balance
+⬅️ If credits are insufficient → Show ad
+💥 After watching, credits are rewarded
+📡 Request processed via FastAPI → AI API
+🧠 AI result stored in DynamoDB + Redis for fast access
+
+🌟 Features
+✨ Multiple AI providers with fallback logic
+
+🧠 Credit-based access system tied to ad viewing
+
+📦 Marketplace for user-generated prompts (users earn 2% of credits if their prompt is reused!)
+
+🖥️ Responsive UI with animation support
+
+🔒 Secure Auth with scalable user sessions
+
+⚡ Fast response with smart caching
+
+🗂️ Project Structure
+
+GenAiToolbox/
+├── app.py                   # FastAPI entrypoint
+├── models.py                # Database models
+├── tools.py                 # Tool configurations
+├── requirements.txt
+├── test_app.py              # Test cases
+│
+├── providers/               # AI provider integrations
+│   ├── huggingface.py
+│   ├── openai.py
+│   ├── openrouter.py
+│   └── deepseek.py
+│
+├── prompts/                 # Prompt templates and user customizations
+│   └── marketplace_data/
+│
+├── static/                  # CSS/JS assets
+│
+├── templates/               # HTML templates
+│   ├── index.html
+│   ├── tool.html
+│   └── result.html
+│
+└── ads/                     # Ad integration
+    └── __init__.py
