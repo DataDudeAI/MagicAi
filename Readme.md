@@ -15,6 +15,7 @@ Ad System: Google AdSense, AdMob, or Revcontent
 Deployment & Scaling: AWS ECS + Fargate (serverless scaling)
 CDN for Speed: Cloudflare (faster static content delivery)
 Authentication: AWS Cognito / Auth0 for secure logins
+
 🏗️ System Design Flow
 ✅ Step 1: User visits the platform and selects an AI tool.
 ✅ Step 2: Platform verifies user's credit balance.
